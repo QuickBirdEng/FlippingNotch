@@ -15,6 +15,5 @@ struct Constants {
     static let notchTopOffset: CGFloat = 26
     static let maxScrollOffset: CGFloat = -86
     static let scrollThreshold: CGFloat = -80
-    static let numberOfItemsInSection = 10
 
 }

@@ -19,6 +19,7 @@ class ViewController: UIViewController {
     fileprivate var notchView = UIView()
     fileprivate var notchViewTopConstraint: NSLayoutConstraint!
     fileprivate var isPulling: Bool = false
+    fileprivate var numberOfItemsInSection = 1
     
     // MARK: Overrides
 
@@ -26,6 +27,7 @@ class ViewController: UIViewController {
         super.viewDidLoad()
         
         configureNotchView()
+        self.collectionView.alwaysBounceVertical = true
     }
     
     override var preferredStatusBarStyle: UIStatusBarStyle {
@@ -57,10 +59,10 @@ class ViewController: UIViewController {
         animatableView.layer.masksToBounds = true
         animatableView.frame = self.notchView.frame
         self.view.addSubview(animatableView)
-        
+
         let flowLayout = collectionView.collectionViewLayout as! UICollectionViewFlowLayout
         let height = flowLayout.itemSize.height + flowLayout.minimumInteritemSpacing
-        
+
         UIView.animate(withDuration: 0.3, delay: 0, options: [], animations: {
             let cellSize = flowLayout.itemSize
             animatableView.frame.size = CGSize(width: Constants.notchWidth, 
@@ -81,6 +83,8 @@ class ViewController: UIViewController {
                 self.collectionView.transform = CGAffineTransform.identity
                 animatableView.removeFromSuperview()
                 self.isPulling = false
+                self.numberOfItemsInSection += 1
+                self.collectionView.reloadData()
             })
         }
     }
@@ -91,7 +95,7 @@ class ViewController: UIViewController {
 extension ViewController: UICollectionViewDataSource {
     
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        return Constants.numberOfItemsInSection
+        return numberOfItemsInSection
     }
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
