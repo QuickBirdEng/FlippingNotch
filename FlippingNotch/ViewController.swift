@@ -60,8 +60,12 @@ class ViewController: UIViewController {
         animatableView.frame = self.notchView.frame
         self.view.addSubview(animatableView)
 
+        notchViewTopConstraint.constant = 0
+        
         let flowLayout = collectionView.collectionViewLayout as! UICollectionViewFlowLayout
         let height = flowLayout.itemSize.height + flowLayout.minimumInteritemSpacing
+
+        self.collectionView.transform = CGAffineTransform.identity.translatedBy(x: 0, y: -Constants.maxScrollOffset)
 
         UIView.animate(withDuration: 0.3, delay: 0, options: [], animations: {
             let cellSize = flowLayout.itemSize
@@ -69,15 +73,13 @@ class ViewController: UIViewController {
                                                height: (cellSize.height / cellSize.width) * Constants.notchWidth)
             animatableView.image = UIImage.fromColor(self.view.backgroundColor?.withAlphaComponent(0.2) ?? UIColor.black)
             animatableView.frame.origin.y = 40
-            self.collectionView.contentOffset.y = 0
             self.collectionView.transform = CGAffineTransform.identity.translatedBy(x: 0, y: height * 0.5)
         }) { _ in
-            UIView.transition(with: animatableView, duration: 0.6, options: UIViewAnimationOptions.transitionFlipFromTop, animations: {
+            UIView.transition(with: animatableView, duration: 0.6, options: UIViewAnimationOptions.transitionFlipFromBottom, animations: {
                 animatableView.frame.size = flowLayout.itemSize
                 animatableView.frame.origin = CGPoint(x: (self.collectionView.frame.width - flowLayout.itemSize.width) / 2.0, 
                                                       y: self.collectionView.frame.origin.y - height * 0.5)
                 animatableView.backgroundColor = UIColor.white
-                self.collectionView.contentOffset.y = 0
                 self.collectionView.transform = CGAffineTransform.identity.translatedBy(x: 0, y: height)
             }, completion: { _ in
                 self.collectionView.transform = CGAffineTransform.identity
@@ -115,7 +117,7 @@ extension ViewController: UICollectionViewDelegate {
         scrollView.contentOffset.y = max(Constants.maxScrollOffset, scrollView.contentOffset.y)
         notchViewTopConstraint.constant = Constants.notchTopOffset - min(0, scrollView.contentOffset.y)
     }
-    
+
     func scrollViewDidEndDragging(_ scrollView: UIScrollView, willDecelerate decelerate: Bool) {
         if !isPulling && scrollView.contentOffset.y <= Constants.scrollThreshold {
             isPulling = true
