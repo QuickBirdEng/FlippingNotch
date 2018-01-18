@@ -10,6 +10,7 @@
 		DC2CC5E62010D167004DB704 /* NSLayoutConstraint+Extention.swift in Sources */ = {isa = PBXBuildFile; fileRef = DC2CC5E52010D167004DB704 /* NSLayoutConstraint+Extention.swift */; };
 		DC2CC5E82010D199004DB704 /* UIImage+Extention.swift in Sources */ = {isa = PBXBuildFile; fileRef = DC2CC5E72010D199004DB704 /* UIImage+Extention.swift */; };
 		DC2CC5EA2010D1E1004DB704 /* Constants.swift in Sources */ = {isa = PBXBuildFile; fileRef = DC2CC5E92010D1E1004DB704 /* Constants.swift */; };
+		DC2CC5EC201107D8004DB704 /* UIView+Extentions.swift in Sources */ = {isa = PBXBuildFile; fileRef = DC2CC5EB201107D8004DB704 /* UIView+Extentions.swift */; };
 		DC4D15A2200BDE240060BA1A /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = DC4D15A1200BDE240060BA1A /* AppDelegate.swift */; };
 		DC4D15A4200BDE240060BA1A /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = DC4D15A3200BDE240060BA1A /* ViewController.swift */; };
 		DC4D15A7200BDE240060BA1A /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = DC4D15A5200BDE240060BA1A /* Main.storyboard */; };
@@ -21,6 +22,7 @@
 		DC2CC5E52010D167004DB704 /* NSLayoutConstraint+Extention.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "NSLayoutConstraint+Extention.swift"; sourceTree = "<group>"; };
 		DC2CC5E72010D199004DB704 /* UIImage+Extention.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIImage+Extention.swift"; sourceTree = "<group>"; };
 		DC2CC5E92010D1E1004DB704 /* Constants.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Constants.swift; sourceTree = "<group>"; };
+		DC2CC5EB201107D8004DB704 /* UIView+Extentions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIView+Extentions.swift"; sourceTree = "<group>"; };
 		DC4D159E200BDE240060BA1A /* FlippingNotch.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = FlippingNotch.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		DC4D15A1200BDE240060BA1A /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		DC4D15A3200BDE240060BA1A /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
@@ -46,6 +48,7 @@
 			children = (
 				DC2CC5E52010D167004DB704 /* NSLayoutConstraint+Extention.swift */,
 				DC2CC5E72010D199004DB704 /* UIImage+Extention.swift */,
+				DC2CC5EB201107D8004DB704 /* UIView+Extentions.swift */,
 			);
 			path = Extentions;
 			sourceTree = "<group>";
@@ -156,6 +159,7 @@
 				DC2CC5EA2010D1E1004DB704 /* Constants.swift in Sources */,
 				DC2CC5E82010D199004DB704 /* UIImage+Extention.swift in Sources */,
 				DC4D15A4200BDE240060BA1A /* ViewController.swift in Sources */,
+				DC2CC5EC201107D8004DB704 /* UIView+Extentions.swift in Sources */,
 				DC2CC5E62010D167004DB704 /* NSLayoutConstraint+Extention.swift in Sources */,
 				DC4D15A2200BDE240060BA1A /* AppDelegate.swift in Sources */,
 			);

@@ -64,22 +64,24 @@ class ViewController: UIViewController {
         
         let flowLayout = collectionView.collectionViewLayout as! UICollectionViewFlowLayout
         let height = flowLayout.itemSize.height + flowLayout.minimumInteritemSpacing
-
+        
         self.collectionView.transform = CGAffineTransform.identity.translatedBy(x: 0, y: -Constants.maxScrollOffset)
 
         UIView.animate(withDuration: 0.3, delay: 0, options: [], animations: {
-            let cellSize = flowLayout.itemSize
+            let itemSize = flowLayout.itemSize
             animatableView.frame.size = CGSize(width: Constants.notchWidth, 
-                                               height: (cellSize.height / cellSize.width) * Constants.notchWidth)
+                                               height: (itemSize.height / itemSize.width) * Constants.notchWidth)
             animatableView.image = UIImage.fromColor(self.view.backgroundColor?.withAlphaComponent(0.2) ?? UIColor.black)
             animatableView.frame.origin.y = 40
             self.collectionView.transform = CGAffineTransform.identity.translatedBy(x: 0, y: height * 0.5)
         }) { _ in
+            let item = self.collectionView.cellForItem(at: IndexPath(row: 0, section: 0))
+            animatableView.image = item?.snapshotImage()
+            
             UIView.transition(with: animatableView, duration: 0.6, options: UIViewAnimationOptions.transitionFlipFromBottom, animations: {
                 animatableView.frame.size = flowLayout.itemSize
                 animatableView.frame.origin = CGPoint(x: (self.collectionView.frame.width - flowLayout.itemSize.width) / 2.0, 
                                                       y: self.collectionView.frame.origin.y - height * 0.5)
-                animatableView.backgroundColor = UIColor.white
                 self.collectionView.transform = CGAffineTransform.identity.translatedBy(x: 0, y: height)
             }, completion: { _ in
                 self.collectionView.transform = CGAffineTransform.identity
@@ -89,6 +91,13 @@ class ViewController: UIViewController {
                 self.collectionView.reloadData()
             })
         }
+        
+        let cornerRadiusAnimation = CABasicAnimation(keyPath: "cornerRadius")
+        cornerRadiusAnimation.fromValue = 16
+        cornerRadiusAnimation.toValue = 10
+        cornerRadiusAnimation.duration = 0.3
+        animatableView.layer.add(cornerRadiusAnimation, forKey: "cornerRadius")
+        animatableView.layer.cornerRadius = 10
     }
 }
 
@@ -99,7 +108,7 @@ extension ViewController: UICollectionViewDataSource {
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         return numberOfItemsInSection
     }
-    
+
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "Cell", for: indexPath)
         
