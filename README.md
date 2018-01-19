@@ -1,4 +1,4 @@
-# What is FlippingNotch 🤙
+# FlippingNotch 🤙
 FlippingNotch is "pull to refresh/add/show" custom animation written Swift, using the iPhone X Notch. 
 
 ![alt text](https://cdn.dribbble.com/users/793057/screenshots/4089014/iphone-x-pull-to-refresh.gif)
