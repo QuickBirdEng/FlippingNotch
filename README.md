@@ -1,4 +1,7 @@
 # FlippingNotch 🤙
+[![Platform](https://img.shields.io/badge/Platform-iOS-lightgrey.svg)]()
+[![Swift 3.2](https://img.shields.io/badge/Swift-4.0-orange.svg)](https://swift.org)
+
 FlippingNotch is "pull to refresh/add/show" custom animation written Swift, using the iPhone X Notch. 
 
 ![alt text](https://cdn.dribbble.com/users/793057/screenshots/4089014/iphone-x-pull-to-refresh.gif)
