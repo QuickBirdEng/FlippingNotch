@@ -10,13 +10,12 @@ It is not a framework, it is just a Dribble inspired project https://dribbble.co
 FlippingNotch is written in Swift 4.0, in Xcode 9.0 and required an iPhone X Simulator/Device.
 
 ### Limitations
-- 
+The animation works as expected only in iPhone X in portrait mode
 
+### TODO
+- Include the case when a NavigationBar is implemented.
 
 ## Authors
 
 * **Joan Disho** - [QuickBird Studios](http://www.quickbirdstudios.com)
 
-## License
-
-This project is licensed under the MIT License - see the [LICENSE.md](LICENSE.md) file for details
