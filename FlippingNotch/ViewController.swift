@@ -122,6 +122,7 @@ extension ViewController: UICollectionViewDataSource {
 
 extension ViewController: UICollectionViewDelegate {
     func scrollViewDidScroll(_ scrollView: UIScrollView) {
+        print(scrollView.contentOffset.y)
         scrollView.contentOffset.y = max(Constants.maxScrollOffset, scrollView.contentOffset.y)
         notchViewBottomConstraint.constant = Constants.notchHeight - min(0, scrollView.contentOffset.y)
     }
