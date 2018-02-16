@@ -74,24 +74,24 @@ class ViewController: UIViewController {
             animatableView.image = UIImage.fromColor(self.view.backgroundColor?.withAlphaComponent(0.2) ?? UIColor.black)
             animatableView.frame.origin.y = 40
             self.collectionView.transform = CGAffineTransform.identity.translatedBy(x: 0, y: height * 0.5)
-        }) 
-//            { _ in
-//            let item = self.collectionView.cellForItem(at: IndexPath(row: 0, section: 0))
-//            animatableView.image = item?.snapshotImage()
-//            
-//            UIView.transition(with: animatableView, duration: 0.6, options: UIViewAnimationOptions.transitionFlipFromBottom, animations: {
-//                animatableView.frame.size = flowLayout.itemSize
-//                animatableView.frame.origin = CGPoint(x: (self.collectionView.frame.width - flowLayout.itemSize.width) / 2.0, 
-//                                                      y: self.collectionView.frame.origin.y - height * 0.5)
-//                self.collectionView.transform = CGAffineTransform.identity.translatedBy(x: 0, y: height)
-//            }, completion: { _ in
-//                self.collectionView.transform = CGAffineTransform.identity
-//                animatableView.removeFromSuperview()
-//                self.isPulling = false
-//                self.numberOfItemsInSection += 1
-//                self.collectionView.reloadData()
-//            })
-//        }
+        }) { _ in
+            let item = self.collectionView.cellForItem(at: IndexPath(row: 0, section: 0))
+            animatableView.image = item?.snapshotImage()
+            
+            UIView.transition(with: animatableView, duration: 3.6, options: UIViewAnimationOptions.transitionFlipFromBottom, animations: {
+                animatableView.frame.size = flowLayout.itemSize
+                animatableView.frame.origin = CGPoint(x: (self.collectionView.frame.width - flowLayout.itemSize.width) / 2.0, 
+                                                      y: self.collectionView.frame.origin.y - height * 0.5)
+                self.collectionView.transform = CGAffineTransform.identity.translatedBy(x: 0, y: height)
+                }, completion: { _ in
+                    self.collectionView.transform = CGAffineTransform.identity
+                    animatableView.removeFromSuperview()
+                    self.isPulling = false
+                    self.numberOfItemsInSection += 1
+                    self.collectionView.reloadData()
+                }
+            )
+        }
         
         let cornerRadiusAnimation = CABasicAnimation(keyPath: "cornerRadius")
         cornerRadiusAnimation.fromValue = 16
@@ -129,8 +129,7 @@ extension ViewController: UICollectionViewDelegate {
     }
 
     func scrollViewDidEndDragging(_ scrollView: UIScrollView, willDecelerate decelerate: Bool) {
-        if !isPulling && scrollView.contentOffset.y <= Constants.scrollThreshold {
-            isPulling = true
+        if scrollView.contentOffset.y <= Constants.maxScrollOffset {
             animateView()
         }
     }
