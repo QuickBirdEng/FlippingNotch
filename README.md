@@ -23,7 +23,7 @@ The image below shows an example how to constraint it.
 
 <img src="https://github.com/jdisho/FlippingNotch/blob/master/Screenshots/cv_cell.png" width="40%">
 
-3. Set up the UICollectionView in the ViewController by conforming to UICollectionViewDataSource.
+3. **Set up the UICollectionView in the ViewController by conforming to UICollectionViewDataSource.**
 
 ``` swift
 class ViewController: UIViewController {
