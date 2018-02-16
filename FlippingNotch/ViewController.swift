@@ -17,7 +17,7 @@ class ViewController: UIViewController {
     // MARK: Fileprivates
 
     fileprivate var notchView = UIView()
-    fileprivate var notchViewBottomConstraint: NSLayoutConstraint!
+    fileprivate var notchViewTopConstraint: NSLayoutConstraint!
     fileprivate var isPulling: Bool = false
     fileprivate var numberOfItemsInSection = 1
     
@@ -42,13 +42,14 @@ class ViewController: UIViewController {
         notchView.translatesAutoresizingMaskIntoConstraints = false
         notchView.backgroundColor = UIColor.black
         notchView.layer.cornerRadius = 20
+        notchView.layer.masksToBounds = false
         
         notchView.centerXAnchor.constraint(equalTo: self.view.centerXAnchor).activate
         notchView.widthAnchor.constraint(equalToConstant: Constants.notchWidth).activate
-        notchView.heightAnchor.constraint(equalToConstant: Constants.notchHeight - Constants.maxScrollOffset).activate
-        notchViewBottomConstraint = notchView.bottomAnchor.constraint(equalTo: self.view.topAnchor, 
-                                                                   constant: Constants.notchHeight)
-        notchViewBottomConstraint.activate
+        notchView.heightAnchor.constraint(equalToConstant: 200).activate
+        notchViewTopConstraint = notchView.bottomAnchor.constraint(equalTo: self.view.topAnchor, 
+                                                                       constant: Constants.notchTopOffset)
+        notchViewTopConstraint.activate
     }
     
     private func animateView() {
@@ -59,37 +60,38 @@ class ViewController: UIViewController {
         animatableView.frame = self.notchView.frame
         self.view.addSubview(animatableView)
 
-        notchViewBottomConstraint.constant = 0
+        notchViewTopConstraint.constant = Constants.notchTopOffset
         
         let flowLayout = collectionView.collectionViewLayout as! UICollectionViewFlowLayout
         let height = flowLayout.itemSize.height + flowLayout.minimumInteritemSpacing
         
         self.collectionView.transform = CGAffineTransform.identity.translatedBy(x: 0, y: -Constants.maxScrollOffset)
 
-        UIView.animate(withDuration: 4.3, delay: 0, options: [], animations: {
+        UIView.animate(withDuration: 3.3, delay: 0, options: [], animations: {
             let itemSize = flowLayout.itemSize
             animatableView.frame.size = CGSize(width: Constants.notchWidth, 
                                                height: (itemSize.height / itemSize.width) * Constants.notchWidth)
             animatableView.image = UIImage.fromColor(self.view.backgroundColor?.withAlphaComponent(0.2) ?? UIColor.black)
             animatableView.frame.origin.y = 40
             self.collectionView.transform = CGAffineTransform.identity.translatedBy(x: 0, y: height * 0.5)
-        }) { _ in
-            let item = self.collectionView.cellForItem(at: IndexPath(row: 0, section: 0))
-            animatableView.image = item?.snapshotImage()
-            
-            UIView.transition(with: animatableView, duration: 4.6, options: UIViewAnimationOptions.transitionFlipFromBottom, animations: {
-                animatableView.frame.size = flowLayout.itemSize
-                animatableView.frame.origin = CGPoint(x: (self.collectionView.frame.width - flowLayout.itemSize.width) / 2.0, 
-                                                      y: self.collectionView.frame.origin.y - height * 0.5)
-                self.collectionView.transform = CGAffineTransform.identity.translatedBy(x: 0, y: height)
-            }, completion: { _ in
-                self.collectionView.transform = CGAffineTransform.identity
-                animatableView.removeFromSuperview()
-                self.isPulling = false
-                self.numberOfItemsInSection += 1
-                self.collectionView.reloadData()
-            })
-        }
+        }) 
+//            { _ in
+//            let item = self.collectionView.cellForItem(at: IndexPath(row: 0, section: 0))
+//            animatableView.image = item?.snapshotImage()
+//            
+//            UIView.transition(with: animatableView, duration: 0.6, options: UIViewAnimationOptions.transitionFlipFromBottom, animations: {
+//                animatableView.frame.size = flowLayout.itemSize
+//                animatableView.frame.origin = CGPoint(x: (self.collectionView.frame.width - flowLayout.itemSize.width) / 2.0, 
+//                                                      y: self.collectionView.frame.origin.y - height * 0.5)
+//                self.collectionView.transform = CGAffineTransform.identity.translatedBy(x: 0, y: height)
+//            }, completion: { _ in
+//                self.collectionView.transform = CGAffineTransform.identity
+//                animatableView.removeFromSuperview()
+//                self.isPulling = false
+//                self.numberOfItemsInSection += 1
+//                self.collectionView.reloadData()
+//            })
+//        }
         
         let cornerRadiusAnimation = CABasicAnimation(keyPath: "cornerRadius")
         cornerRadiusAnimation.fromValue = 16
@@ -122,15 +124,14 @@ extension ViewController: UICollectionViewDataSource {
 
 extension ViewController: UICollectionViewDelegate {
     func scrollViewDidScroll(_ scrollView: UIScrollView) {
-        print(scrollView.contentOffset.y)
         scrollView.contentOffset.y = max(Constants.maxScrollOffset, scrollView.contentOffset.y)
-        notchViewBottomConstraint.constant = Constants.notchHeight - min(0, scrollView.contentOffset.y)
+        notchViewTopConstraint.constant = Constants.notchTopOffset - min(0, scrollView.contentOffset.y)
     }
 
     func scrollViewDidEndDragging(_ scrollView: UIScrollView, willDecelerate decelerate: Bool) {
         if !isPulling && scrollView.contentOffset.y <= Constants.scrollThreshold {
             isPulling = true
-//            animateView()
+            animateView()
         }
     }
 }
