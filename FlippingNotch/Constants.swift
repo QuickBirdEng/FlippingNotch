@@ -12,8 +12,7 @@ import UIKit
 struct Constants {
 
     static let notchWidth: CGFloat = 209
-    static let notchTopOffset: CGFloat = 26
+    static let notchHeight: CGFloat = 26
     static let maxScrollOffset: CGFloat = -86
-    static let scrollThreshold: CGFloat = -80
-
+    static let notchViewTopInset: CGFloat = 40
 }

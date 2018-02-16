@@ -17,7 +17,7 @@ class ViewController: UIViewController {
     // MARK: Fileprivates
 
     fileprivate var notchView = UIView()
-    fileprivate var notchViewTopConstraint: NSLayoutConstraint!
+    fileprivate var notchViewBottomConstraint: NSLayoutConstraint!
     fileprivate var isPulling: Bool = false
     fileprivate var numberOfItemsInSection = 1
     
@@ -44,12 +44,12 @@ class ViewController: UIViewController {
         notchView.layer.cornerRadius = 20
         notchView.layer.masksToBounds = false
         
-        notchView.centerXAnchor.constraint(equalTo: self.view.centerXAnchor).activate
-        notchView.widthAnchor.constraint(equalToConstant: Constants.notchWidth).activate
-        notchView.heightAnchor.constraint(equalToConstant: 200).activate
-        notchViewTopConstraint = notchView.bottomAnchor.constraint(equalTo: self.view.topAnchor, 
-                                                                       constant: Constants.notchTopOffset)
-        notchViewTopConstraint.activate
+        notchView.centerXAnchor.constraint(equalTo: self.view.centerXAnchor).activate()
+        notchView.widthAnchor.constraint(equalToConstant: Constants.notchWidth).activate()
+        notchView.heightAnchor.constraint(equalToConstant: 200).activate()
+        notchViewBottomConstraint = notchView.bottomAnchor.constraint(equalTo: self.view.topAnchor, 
+                                                                       constant: Constants.notchHeight)
+        notchViewBottomConstraint.activate()
     }
     
     private func animateView() {
@@ -60,7 +60,7 @@ class ViewController: UIViewController {
         animatableView.frame = self.notchView.frame
         self.view.addSubview(animatableView)
 
-        notchViewTopConstraint.constant = Constants.notchTopOffset
+        notchViewBottomConstraint.constant = Constants.notchHeight
         
         let flowLayout = collectionView.collectionViewLayout as! UICollectionViewFlowLayout
         let height = flowLayout.itemSize.height + flowLayout.minimumInteritemSpacing
@@ -72,7 +72,7 @@ class ViewController: UIViewController {
             animatableView.frame.size = CGSize(width: Constants.notchWidth, 
                                                height: (itemSize.height / itemSize.width) * Constants.notchWidth)
             animatableView.image = UIImage.fromColor(self.view.backgroundColor?.withAlphaComponent(0.2) ?? UIColor.black)
-            animatableView.frame.origin.y = 40
+            animatableView.frame.origin.y = Constants.notchViewTopInset
             self.collectionView.transform = CGAffineTransform.identity.translatedBy(x: 0, y: height * 0.5)
         }) { _ in
             let item = self.collectionView.cellForItem(at: IndexPath(row: 0, section: 0))
@@ -125,7 +125,7 @@ extension ViewController: UICollectionViewDataSource {
 extension ViewController: UICollectionViewDelegate {
     func scrollViewDidScroll(_ scrollView: UIScrollView) {
         scrollView.contentOffset.y = max(Constants.maxScrollOffset, scrollView.contentOffset.y)
-        notchViewTopConstraint.constant = Constants.notchTopOffset - min(0, scrollView.contentOffset.y)
+        notchViewBottomConstraint.constant = Constants.notchHeight - min(0, scrollView.contentOffset.y)
     }
 
     func scrollViewDidEndDragging(_ scrollView: UIScrollView, willDecelerate decelerate: Bool) {

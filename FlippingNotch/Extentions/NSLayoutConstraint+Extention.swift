@@ -11,11 +11,11 @@ import UIKit
 
 extension NSLayoutConstraint {
     
-    var activate: Void {
+    func activate() {
         NSLayoutConstraint.activate([self])
     }
     
-    var deactivate: Void {
+    func deactivate() {
         NSLayoutConstraint.deactivate([self])
     }
     
