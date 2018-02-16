@@ -72,7 +72,7 @@ extension ViewController: UICollectionViewDataSource {
    fileprivate var numberOfItemsInSection = 1
 ```
 - After instantiating the notchView, add it as a subview its parent view. 
-  The `notchView should have a black background and rounded corners. 
+  The notchView should have a black background and rounded corners. 
   `translatesAutoResizingMaskIntoConstraints` needs to be set to `false` because
   the notchView is programmably created, we want to use auto layout for this view rather than frame-based layout,
   and the notchView will be added to a view hierarchy that is using auto layout.
