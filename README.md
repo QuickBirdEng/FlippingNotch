@@ -2,26 +2,28 @@
 [![Platform](https://img.shields.io/badge/Platform-iOS-lightgrey.svg)]()
 [![Swift 3.2](https://img.shields.io/badge/Swift-4.0-orange.svg)](https://swift.org)
 
-FlippingNotch is "pull to refresh/add/show" custom animation written Swift, using the iPhone X Notch. 
+FlippingNotch is "pull to refresh/add/show" custom animation written Swift, using the iPhone X Notch. Heavily inspired by this Dribble project: https://dribbble.com/shots/4089014-Pull-To-Refresh-iPhone-X
 
 ![alt text](https://cdn.dribbble.com/users/793057/screenshots/4089014/iphone-x-pull-to-refresh.gif)
 
 ### What FlippingNotch is not
-It is not a framework, it is just a Dribble inspired project https://dribbble.com/shots/4089014-Pull-To-Refresh-iPhone-X
+It is not a framework, it is just an Xcode project, embracing the notch.
 
 ### Requirements
-FlippingNotch is written in Swift 4.0, in Xcode 9.0 and required an iPhone X Simulator/Device.
+FlippingNotch is written in Swift 4.0 and requires an iPhone X Simulator/Device.
 
 ### Tutorial
-1. **Put a CollectionView in a ViewController and setup the constrains.**
+1. **Put a UICollectionView and constraint it in a ViewController.**
+
+The image below shows an example how to constraint it.
 
 <img src="https://github.com/jdisho/FlippingNotch/blob/master/Screenshots/cv_constrains.png" width="30%">
 
-2. **Add a Cell in the CollectionView.**
+2. **Add a cell in the UICollectionView.**
 
 <img src="https://github.com/jdisho/FlippingNotch/blob/master/Screenshots/cv_cell.png" width="40%">
 
-3. Set up the CollectionView in the ViewController
+3. Set up the UICollectionView in the ViewController by conforming to UICollectionViewDataSource.
 
 ``` swift
 class ViewController: UIViewController {
@@ -65,17 +67,16 @@ extension ViewController: UICollectionViewDataSource {
 ```
 
 4. **The Notch View**
-- Instantiate a view: 
+- Instantiate a view that represents the notch. The `notchViewBottomConstraint` is used to possition the notchView into the view.
+
 ``` swift 
    fileprivate var notchView = UIView()
    fileprivate var notchViewBottomConstraint: NSLayoutConstraint!
    fileprivate var numberOfItemsInSection = 1
 ```
 - After instantiating the notchView, add it as a subview its parent view. 
-  The notchView should have a black background and rounded corners. 
-  `translatesAutoResizingMaskIntoConstraints` needs to be set to `false` because
-  the notchView is programmably created, we want to use auto layout for this view rather than frame-based layout,
-  and the notchView will be added to a view hierarchy that is using auto layout.
+  The notchView have a black background and rounded corners. 
+  `translatesAutoResizingMaskIntoConstraints` needs to be set to `false` because we want to use auto layout for this view rather than frame-based layout.
   Then, the notchView is constrained to the center of its parent view, with the same width as the notch, a height of `(notch height - maximum scorolling offset what we want to give)` and a bottom constrained to its parent view `topAnchor` + notch height.
 
 ``` swift
@@ -87,13 +88,13 @@ private func configureNotchView() {
         notchView.backgroundColor = UIColor.black
         notchView.layer.cornerRadius = 20
         
-        notchView.centerXAnchor.constraint(equalTo: self.view.centerXAnchor).activate
-        notchView.widthAnchor.constraint(equalToConstant: Constants.notchWidth).activate
+        notchView.centerXAnchor.constraint(equalTo: self.view.centerXAnchor).activate()
+        notchView.widthAnchor.constraint(equalToConstant: Constants.notchWidth).activate()
         notchView.heightAnchor.constraint(equalToConstant: Constants.notchHeight - 
-                                                           Constants.maxScrollOffset).activate
+                                                           Constants.maxScrollOffset).activate()
         notchViewBottomConstraint = notchView.bottomAnchor.constraint(equalTo: self.view.topAnchor, 
                                                                       constant: Constants.notchHeight)
-        notchViewBottomConstraint.activate
+        notchViewBottomConstraint.activate()
     }
 ```
 The result in an iPhone 8:
@@ -102,7 +103,7 @@ The result in an iPhone 8:
 
 5. **Reacting while scrolling**
 
- (Looks clearer in an iPhone 8 what are we trying to do)
+ (Looks clearer in an iPhone 8 what we are trying to do)
  
 - We want to move down the notchView while scrolling
 <img src="https://github.com/jdisho/FlippingNotch/blob/master/Screenshots/notch_stretching.gif" width="40%">
@@ -112,12 +113,15 @@ The result in an iPhone 8:
 - The bottom constrained of the notchView should be increased while scrolling.
 ``` swift 
   extension ViewController: UICollectionViewDelegate {
-    // Scroll until we reach maxScrollOffset
-    scrollView.contentOffset.y = max(Constants.maxScrollOffset, scrollView.contentOffset.y)
+
+    func scrollViewDidScroll(_ scrollView: UIScrollView) {
     
-    // Move down the notchView until we have reached our threshold
-    notchViewBottomConstraint.constant = Constants.notchHeight - min(0, scrollView.contentOffset.y)
-  }
+        // Making sure that we contentOffset of the scrollView is max to maxScrollOffset
+        scrollView.contentOffset.y = max(Constants.maxScrollOffset, scrollView.contentOffset.y)
+        
+        // Move down the notchView until we have reached our threshold
+        notchViewTopConstraint.constant = Constants.notchTopOffset - min(0, scrollView.contentOffset.y)
+    }
 ```
 
 6. **Drop the view from the notch**
@@ -148,16 +152,18 @@ The result in an iPhone 8:
         self.collectionView.transform = CGAffineTransform.identity.translatedBy(x: 0, y: -Constants.maxScrollOffset)
 
         // Dropping animation
-        UIView.animate(withDuration: 3.3, delay: 0, options: [], animations: {
+        UIView.animate(withDuration: 0.3, delay: 0, options: [], animations: {
             let itemSize = flowLayout.itemSize
             animatableView.frame.size = CGSize(width: Constants.notchWidth, 
                                                height: (itemSize.height / itemSize.width) * Constants.notchWidth)
+
+            // UIImage.fromColor(color), returns an image in a certain color
             animatableView.image = UIImage.fromColor(self.view.backgroundColor?.withAlphaComponent(0.2) ?? UIColor.black)
-            animatableView.frame.origin.y = 40
+            animatableView.frame.origin.y = Constants.notchViewTopInset
             self.collectionView.transform = CGAffineTransform.identity.translatedBy(x: 0, y: height * 0.5)
         }) 
         
-        // Round the corners
+        // Animate the corners
         let cornerRadiusAnimation = CABasicAnimation(keyPath: "cornerRadius")
         cornerRadiusAnimation.fromValue = 16
         cornerRadiusAnimation.toValue = 10
@@ -193,7 +199,9 @@ extension ViewController: UICollectionViewDelegate {
             
         }) { _ in
             
-            // Snapshot the collectionView cell
+            // Snapshot the collectionView cell. 
+            // It is easier to deal with an image of the cell than the cell itself
+            // This is the reason why animatableView is an UIImageView and not a UIView.
             let item = self.collectionView.cellForItem(at: IndexPath(row: 0, section: 0))
             animatableView.image = item?.snapshotImage()
             
@@ -204,6 +212,7 @@ extension ViewController: UICollectionViewDelegate {
                                                       y: self.collectionView.frame.origin.y - height * 0.5)
                 self.collectionView.transform = CGAffineTransform.identity.translatedBy(x: 0, y: height)
                 }, completion: { _ in
+                    // Remove the animatableView
                     self.collectionView.transform = CGAffineTransform.identity
                     animatableView.removeFromSuperview()
                     
