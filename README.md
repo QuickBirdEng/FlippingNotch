@@ -67,7 +67,7 @@ extension ViewController: UICollectionViewDataSource {
 ```
 
 4. **The Notch View**
-- Instantiate a view that represents the notch. The `notchViewBottomConstraint` is used to possition the notchView into the view.
+- Instantiate a view that represents the notch. The `notchViewBottomConstraint` is used to position the notchView into the view.
 
 ``` swift 
    fileprivate var notchView = UIView()
@@ -77,7 +77,7 @@ extension ViewController: UICollectionViewDataSource {
 - After instantiating the notchView, add it as a subview its parent view. 
   The notchView have a black background and rounded corners. 
   `translatesAutoResizingMaskIntoConstraints` needs to be set to `false` because we want to use auto layout for this view rather than frame-based layout.
-  Then, the notchView is constrained to the center of its parent view, with the same width as the notch, a height of `(notch height - maximum scorolling offset what we want to give)` and a bottom constrained to its parent view `topAnchor` + notch height.
+  Then, the notchView is constrained to the center of its parent view, with the same width as the notch, a height of `(notch height - maximum scrolling offset what we want to give)` and a bottom constrained to its parent view `topAnchor` + notch height.
 
 ``` swift
 
@@ -109,7 +109,7 @@ The result in an iPhone 8:
 <img src="https://github.com/jdisho/FlippingNotch/blob/master/Screenshots/notch_stretching.gif" width="40%">
 
 - To do this, first we have to conform our ViewController to UICollectionViewDelegate and call `scrollViewDidScroll` delegate function. In there we write the logic to move the notchView down.
-- The scrollView should scroll until it reaches `the maximum scorolling offset what we want to give`
+- The scrollView should scroll until it reaches `the maximum scrolling offset what we want to give`
 - The bottom constrained of the notchView should be increased while scrolling.
 ``` swift 
   extension ViewController: UICollectionViewDelegate {
